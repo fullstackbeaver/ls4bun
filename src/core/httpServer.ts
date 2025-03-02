@@ -1,6 +1,5 @@
 import type { DefineCustomsMethods, UpdatedRequest } from "./httpServer_type";
 import type { Serve, Server }                        from "bun";
-import      { serve }                                from "bun";
 
 const customMethods         = {} as {[key: string]: Function};
 const definedServerSettings = {} as Serve;
@@ -16,7 +15,7 @@ export async function useServer(serverSettings: Serve, methods?: DefineCustomsMe
     Object.assign(definedServerSettings, serverSettings);
   }
 
-  Object.assign(server, serve(serverSettings));
+  Object.assign(server, Bun.serve(serverSettings));
   console.log("server started!");
 }
 

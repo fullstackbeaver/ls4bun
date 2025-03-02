@@ -3,6 +3,7 @@
   "module": "src/index.ts",
   "type": "module",
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.20.0",
@@ -10,6 +11,7 @@
     "@types/eslint": "^9.6.1",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
+    "bun": "^1.2.4",
     "eslint": "^9.20.1"
   },
   "peerDependencies": {
@@ -17,5 +19,9 @@
   },
   "dependencies": {
     "chokidar": "^4.0.3"
+  },
+  "scripts": {
+    "build" : "./scripts/build.sh",
+    "run_example": "bun run ./example/index.js"
   }
 }

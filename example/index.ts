@@ -1,8 +1,7 @@
-import      { dynamicRoutes, staticRoutes }                         from "./examples routes";
-import      { useDefaultErrorHandler, useDynamicRoutes, useServer } from "../src";
-import type { UpdatedRequest }                                      from "../src";
-import      { useMiddleware }                                       from "../src/core/httpServer";
-import      { useWatcher }                                          from "../src/dependencies/watcher";
+import      { dynamicRoutes, staticRoutes }                                     from "./routes";
+import      { useDefaultErrorHandler, useDynamicRoutes, useServer, useWatcher } from "../dist";
+import type { UpdatedRequest }                                                  from "../dist";
+import      { useMiddleware }                                                   from "../dist";
 
 useServer(
   {

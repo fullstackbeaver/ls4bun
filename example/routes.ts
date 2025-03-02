@@ -1,8 +1,6 @@
-import      { addRoutes, addStaticFolder }             from "../src/core/router";
+import      { Method, addRoutes, addStaticFolder }     from "../dist";
+import type { RouteAnswer, UpdatedRequest }            from "../dist";
 import      { getPageContent, getPagesList, savePage } from "./core";
-import      { Method }                                 from "../src";
-import type { RouteAnswer }                            from "../src/core/router_type";
-import type { UpdatedRequest }                         from "../src/core/httpServer_type";
 
 const apiPath = "/api/v1";
 

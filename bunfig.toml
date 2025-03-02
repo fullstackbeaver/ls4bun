@@ -1,0 +1,3 @@
+[build]
+target = "module"
+transpileOnly = true  # Évite de transpiler les types (utilise tsc pour ça)
