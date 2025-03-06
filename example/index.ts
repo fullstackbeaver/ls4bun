@@ -1,39 +1,41 @@
-import      { dynamicRoutes, staticRoutes }                                     from "./routes";
-import      { useDefaultErrorHandler, useDynamicRoutes, useServer, useWatcher } from "../dist";
-import type { UpdatedRequest }                                                  from "../dist";
-import      { useMiddleware }                                                   from "../dist";
+import { Method, WorkingRequest, useMiddlewares } from "../src";    //TODO switch to dist
+import { routes }                                 from "./routes";
+import { useDefaultErrorHandler }                 from "./error";
 
-useServer(
+Bun.serve(
   {
     error(error) {
       return useDefaultErrorHandler(error, this.development);
     },
-    async fetch(request: Request) {
-      return await useDynamicRoutes(request, dynamicRoutes);
+    async fetch() {
+      return new Response("Not Found", { status: 404 });
     },
-    port  : 4002,
-    static: staticRoutes
-  },
-  { // methods to launch on server start or on reload
-    css: {
-      action         : () => {/* a function that compile CSS */ },
-      useOnFirstStart: true
-    }
+    port: 4002,
+    routes
   }
 );
 
-useWatcher(
-  [__dirname+"/dist"],
-  (filePath:string) => {
-    const fnToCallOnReload = [] as string[];
-    filePath.endsWith(".scss") && fnToCallOnReload.push("css");
-    // it could have more rules, just fill the array with needed methods name
-    return fnToCallOnReload;
-  }
-);
+console.log("Listening on http://localhost:4002");
 
-useMiddleware((request: UpdatedRequest) => {
-  const errorMessage = "401|Unauthorized";
+useMiddlewares([
+  dummyAuthCheck,
+  extractBody
+]);
+
+function dummyAuthCheck(request: WorkingRequest) {
   const token        = request.headers.get("Authorization")?.replace("Bearer ", "") || "";
-  if (token === "") throw new Error(errorMessage);
-});
+  if (token === "") throw new Error("401|Unauthorized");
+}
+
+function extractBody(request: WorkingRequest) {
+  if (request.method !== Method.POST && request.method !== Method.PUT && request.method !== Method.PATCH && request.body) {
+    request.context.body = request.json();
+  }
+}
+
+/*
+
+ajouter les verifs de schema
+deplacer dans des dossiers pour préparer les tests à venir
+
+*/

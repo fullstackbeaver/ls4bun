@@ -1,9 +1,7 @@
 {
   "name": "ls4bun",
-  "module": "src/index.ts",
-  "type": "module",
   "main": "dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "src/index.ts",
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.21.0",
@@ -19,12 +17,15 @@
   "peerDependencies": {
     "typescript": "^5.7.3"
   },
-  "dependencies": {
-    "chokidar": "^4.0.3"
-  },
   "scripts": {
     "build": "./scripts/build.sh",
     "run_example": "bun run ./example/index.js",
-    "knip": "knip"
+    "knip": "knip",
+    "tests": "bun run ./scripts/runTests.ts"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "suretype": "^3.3.1"
   }
 }

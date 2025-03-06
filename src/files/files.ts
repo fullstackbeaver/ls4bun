@@ -1,6 +1,5 @@
-import { ContentType } from "../core/httpServer_constants";
-import fs              from "node:fs";
-import path            from "node:path";
+import fs   from "node:fs";
+import path from "node:path";
 
 function listAllFiles(dirPath:string, arrayOfFiles:string[]):string[] {
   const files = fs.readdirSync(dirPath);
@@ -21,24 +20,5 @@ export function getFolderContent(folder: string) {
   } catch (err) {
     console.error("Error reading folder:", err);
     throw err;
-  }
-}
-
-export function defineContentType(fileName:string){
-  switch (fileName.split(".").pop()) {
-    case "html":
-      return ContentType.HTML;
-    case "css":
-      return ContentType.CSS;
-    case "js":
-      return ContentType.JS;
-    case "json":
-      return ContentType.JSON;
-    case "jpg":
-      return ContentType.JPG;
-    case "svg":
-      return ContentType.SVG;
-    default:
-      return ContentType.TEXT;
   }
 }

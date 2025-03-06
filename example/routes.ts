@@ -1,45 +1,41 @@
-import      { Method, addRoutes, addStaticFolder }     from "../dist";
-import type { RouteAnswer, UpdatedRequest }            from "../dist";
-import      { getPageContent, getPagesList, savePage } from "./core";
+import { Method, addStaticFolder, handleRoute, staticFile } from "../src"; //TODO switch to dist
 
 const apiPath = "/api/v1";
 
-export const dynamicRoutes = addRoutes([
-  {
-    path        : process.env.API_PATH + "/load",
-    [Method.GET]: {
-      handler: ({ urlObject }: UpdatedRequest): RouteAnswer => getPageContent(urlObject.search.slice(1))
-    }
+export const routes = {
+  // Per-HTTP method handlers
+  [apiPath+"/posts"]: {
+    [Method.GET] : () => new Response("List posts"),
+    [Method.POST]: async req => {
+      const body = await req.json();
+      return Response.json({ created: true, ...body });
+    },
   },
-  {
-    path        : process.env.API_PATH + "/getPages",
-    [Method.GET]: {
-      handler: async () => getPagesList()
-    }
-  },
-  {
-    path         : process.env.API_PATH + "/savePage",
-    [Method.POST]: {
-      handler: (req: UpdatedRequest) => {
-        savePage(req.extractedBody as object);
-        return undefined;
-      }
-    }
-  },
-  {
-    path        : "/preview/*",
-    [Method.GET]: {
-      handler: (req: UpdatedRequest) => {
-        console.log(req);
-        return undefined;
-      }
-    }
-  }]);
+  [apiPath+"/routeWithMiddleware/:id"]: async req => handleRoute(req, {
+    handler: async request => {
+      return {
+        body: `Hello User ${request.params.id}!`
+      };
+    },
+    // inputSchema : {},
+    // outputSchema: {}
+  }),
 
-export const staticRoutes = {
-  //TODO add to swagger and bruno
-  [apiPath + "/health"]: new Response("All good!"),                    // health-check endpoint
-  // ...await addStaticFolder(__dirname+"/front/", ""),                                //interface d'admin
-  // ...await addStaticFolder(process.cwd()+process.env.OUTPUT_FOLDER+assets, assets)  //assets
-  ... await addStaticFolder(__dirname+"/dist", "")
+  // Wildcard route for all routes that start with "/api/" and aren't otherwise matched
+  [apiPath+"/*"]: Response.json({ message: "Not found" }, { status: 404 }),
+
+  // Redirect from /blog/hello to /blog/hello/world
+  "/blog/hello": Response.redirect("/blog/hello/world"),
+
+  // Dynamic routes
+  [apiPath+"/users/:id"]: req => new Response(`Hello User ${req.params.id}!`),
+
+  // Static routes
+  [apiPath + "/status"]: new Response("OK"),
+
+  // serve folder content as static;
+  ...addStaticFolder(__dirname+"/dist", ""),
+
+  // Serve a file by buffering it in memory
+  "/otherIcon.ico": async () => staticFile(__dirname+"/dist/favicon.ico")
 };

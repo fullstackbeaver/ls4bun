@@ -1,3 +1,4 @@
+import type { RouteAnswerBody } from "router/router_type";
 /**
  * Builds a response object from a given body and status.
  *
@@ -6,7 +7,4 @@
  * @returns {Response}
  * @throws  {TypeError} If the body is not a string or an object.
  */
-export declare function makeResponse({ body, status }: {
-    status?: number;
-    body: string | object | undefined;
-}): Response;
+export declare function makeResponse(body: RouteAnswerBody, status: number, customHeaders?: {}): Response;
