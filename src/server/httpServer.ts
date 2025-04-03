@@ -1,40 +1,53 @@
-import type { BunRequest }         from "bun";
-import type { RouteSpec }          from "../router/router_type";
-import type { WorkingRequest }     from "../server/httpServer_type";
-import      { extractRequestBody } from "security/secureBodyMiddleware";
-import      { isValid }            from "suretype";
-import      { makeResponse }       from "../response/response";
+import type { Middlewares, WorkingRequest } from "../server/httpServer_type";
+import type { BunRequest }                  from "bun";
+import type { RouteSpec }                   from "../router/router_type";
+import      { extractBody }                 from "security/secureBodyMiddleware";
+import      { isValid }                     from "suretype";
+import      { makeResponse }                from "../response/response";
 
-let middlewares:Function[] = [extractRequestBody];
+const middlewares: Middlewares = {
+  after : [],
+  before: [extractBody]
+};
 
+/**
+ * Run a route handler on a given request.
+ *
+ * @param {BunRequest} request      The request to be handled.
+ * @param {RouteSpec}  routeSpec    The route specification.
+ * @param {Function}   [responseFn] A function to build the response.
+ *
+ * @returns A Promise resolving to the handled response.
+ */
 export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, responseFn = makeResponse) {
 
   const req = bunRequestToWorkingRequest(request);
 
-  for (const middleware of middlewares) {
+  for (const middleware of middlewares.before as Function[]) {
     await middleware(req);
   }
 
-  const result = await runRoute(req, routeSpec);
+  req.result = await runRoute(req, routeSpec);
+
+  for (const middleware of middlewares.after as Function[]) {
+    await middleware(req);
+  }
 
   return responseFn(
-    result.body,
-    result.status,
-    result.headers
+    req.result.body,
+    req.result.status,
+    req.result.headers
   );
 }
 
 /**
- * Configure the list of middlewares to run before any route handler.
- * The first middleware in the list is always the extractRequestBody middleware and it is added automatically
+ * Configure the list of middlewares to run before and after any route handler.
  *
- * @param {Function[]} middlewaresList - The list of middlewares to run.
+ * @param {Middlewares} middlewaresList - The list of middlewares functions to run.
  */
-export function useMiddlewares(middlewaresList: Function[]) {
-  middlewares = [
-    extractRequestBody,
-    ...middlewaresList
-  ];
+export function useMiddlewares(middlewaresList: Middlewares) {
+  if (middlewaresList.before) middlewares.before = middlewaresList.before;
+  if (middlewaresList.after)  middlewares.after  = middlewaresList.after;
 }
 
 /**
@@ -51,9 +64,8 @@ export function useMiddlewares(middlewaresList: Function[]) {
  */
 export async function runRoute(request: WorkingRequest, routeSpec: RouteSpec) {
   const { handler, inputSchema, outputSchema } = routeSpec;
-  // console.log(request.body, inputSchema, isValid(inputSchema, request.body));
+
   if (inputSchema && !isValid(inputSchema, request.body)) throw new Error("400|wrong body data");
-  // process.exit();
 
   const result = handler.constructor.name === "AsyncFunction"
     ? await handler(request)
@@ -72,14 +84,14 @@ export async function runRoute(request: WorkingRequest, routeSpec: RouteSpec) {
  * @private This function is only exposed for testing purposes
  * @returns {WorkingRequest} A WorkingRequest object
  */
-export function bunRequestToWorkingRequest(request:BunRequest){
+export function bunRequestToWorkingRequest(request:BunRequest): WorkingRequest {
   return {
     body   : request.body,
     context: {},
     headers: request.headers,
     params : request.params,
     result : {
-      body: null,
+      body: null
     },
   };
 }

@@ -1,7 +1,7 @@
 # ls4bun
 *A Lightweight Server for Bun*
 
-ls4bun is designed to be a minimal and secure overlay to bun. It offers simplified routings like static routes. It includes a secure deserialization of the body in requests and an optional validation system of input and output schemas. Finally it integrates a system of middlewares.
+ls4bun is designed to be a minimal and secure overlay to bun server. It offers simplified routings like static routes. It includes a secure deserialization of the body in requests and an optional validation system of input and output schemas. Finally it integrates a system of middlewares.
 
 It is currently in development.
 

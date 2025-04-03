@@ -14,20 +14,33 @@ export function sanitizeInput(input: unknown): unknown { //export for tests
   return input;
 }
 
+// function sanityzeString(input: string): string {
+//   return input.replace(/[&<>"']/g, (match) => {
+//     const replacements: { [key: string]: string } = {
+//       "\"": "&quot;",
+//       "&" : "&amp;",
+//       "'" : "&#39;",
+//       "<" : "&lt;",
+//       ">" : "&gt;",
+//     };
+//     return replacements[match] ?? match;
+//   });
+// }
+
 function sanityzeString(input: string): string {
-  return input.replace(/[&<>"']/g, (match) => {
-    const replacements: { [key: string]: string } = {
-      "\"": "&quot;",
-      "&" : "&amp;",
-      "'" : "&#39;",
-      "<" : "&lt;",
-      ">" : "&gt;",
-    };
-    return replacements[match] ?? match;
-  });
+  const replacements: { [key: string]: string } = {
+    "\"": "&quot;",
+    "&" : "&amp;",
+    "'" : "&#39;",
+    "/" : "&#x2F;",
+    "<" : "&lt;",
+    ">" : "&gt;"
+  };
+
+  return input.replace(/[&<>"'/]/g, (match) => replacements[match] ?? match);
 }
 
-export async function extractRequestBody(request: WorkingRequest): Promise<unknown> {
+export async function extractBody(request: WorkingRequest): Promise<unknown> {
   if (
     request.method === "GET"     ||
     request.method === "DELETE"  ||

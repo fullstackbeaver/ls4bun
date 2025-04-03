@@ -31,11 +31,11 @@
     "emitDeclarationOnly"             : true,                         // Génère seulement les fichiers .d.ts
     "esModuleInterop"                 : true,
     "forceConsistentCasingInFileNames": true,
-    "outDir"                          : "./dist",
+    "outDir"                          : "./lib",
     "paths"                           : { "*": ["./*"] },
     "preserveSymlinks"                : true,
     "rootDir"                         : "./src"
   },
   "include": [ "./src" ],
-  "exclude": ["./node_modules", "./dist", "./example"]
+  "exclude": ["./node_modules", "./lib", "./example"]
 }

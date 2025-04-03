@@ -1,26 +1,26 @@
-import { extractRequestBody, sanitizeInput } from "./secureBodyMiddleware";
-import { bunRequestToWorkingRequest }        from "../server/httpServer";
+import { extractBody, sanitizeInput } from "./secureBodyMiddleware";
+import { bunRequestToWorkingRequest } from "../server/httpServer";
 
 
 describe("secure body from request to avoid XSS injections", () => {
-  it("1. extractRequestBody should return undefined with a GET request", async () => {
+  it("1. extractBody should return undefined with a GET request", async () => {
     const request = new Request("https://example.com", { method: "GET" });
-    expect(await extractRequestBody(request)).toBeUndefined();
+    expect(await extractBody(request)).toBeUndefined();
   });
 
-  it("2. extractRequestBody should throw an error with a POST request without content-type", async () => {
+  it("2. extractBody should throw an error with a POST request without content-type", async () => {
     const request = new Request("https://example.com", { method: "POST", body: JSON.stringify({}) });
-    await expect(extractRequestBody(request)).rejects.toThrowError("400|Invalid content type. Expected application/json");
+    await expect(extractBody(request)).rejects.toThrowError("400|Invalid content type. Expected application/json");
   });
 
-  it("3. extractRequestBody should throw an error with a POST request with a bad content-type", async () => {
+  it("3. extractBody should throw an error with a POST request with a bad content-type", async () => {
     const request = new Request("https://example.com", { method: "POST", body: JSON.stringify({}), headers: { "content-type": "application/xml" } });
-    await expect(extractRequestBody(request)).rejects.toThrowError("400|Invalid content type. Expected application/json");
+    await expect(extractBody(request)).rejects.toThrowError("400|Invalid content type. Expected application/json");
   });1
 
-  it("4. extractRequestBody should return the body with a POST request with a good content-type", async () => {
+  it("4. extractBody should return the body with a POST request with a good content-type", async () => {
     const request = bunRequestToWorkingRequest(new Request("https://example.com", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ foo: "bar" }) }));
-    await extractRequestBody(request);
+    await extractBody(request);
     expect(request.body).toEqual({ foo: "bar" });
   });
 

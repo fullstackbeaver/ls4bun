@@ -9,10 +9,9 @@ const appProcess = Bun.spawn(["bun", "run", "./example/index.ts"], {
 });
 
 console.log("Application lancée, attente de 2 secondes pour être sûr qu\"elle est prête...");
-await setTimeout(2000); // Attendre que l"application soit prête
+await setTimeout(2000);
 
 try {
-  // Lancer les tests
   const testProcess = spawnSync("bun", ["test"], {
     stdio: "inherit",
   });
@@ -24,7 +23,6 @@ try {
  
   console.log("Tous les tests ont réussi");
 } finally {
-  // Arrêter l"application
   appProcess.kill();
   console.log("Application arrêtée");
 }

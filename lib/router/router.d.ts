@@ -22,8 +22,8 @@ export declare function addStaticFolder(folder: string, exposedPath?: string): S
  *
  * @example
  * // Serve a file by buffering it in memory
- * "/favicon.ico": async () => staticFile(__dirname+"/dist/favicon.ico"),
+ * "/favicon.ico": staticFile(__dirname+"/dist/favicon.ico"),
  *
  * @returns {Response} - A Response containing the file content
  */
-export declare function staticFile(file: string): Promise<Response>;
+export declare function staticFile(fileWithPath: string): () => Response;
