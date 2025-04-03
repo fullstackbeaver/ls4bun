@@ -1,38 +1,45 @@
 # ls4bun
 *A Lightweight Server for Bun*
 
-ls4bun is designed to be as minimal and secure as possible.
+
+ls4bun is designed to be a minimal and secure overlay to bun server. It offers simplified routings like static routes. It includes a secure deserialization of the body in requests and an optional validation system of input and output schemas. Finally it integrates a system of middlewares.
 
 It is currently in development.
 
 ## Roadmap
 
 ### Router
-- [X] Handle routes using string comparison
-- [ ] Handle routes using regular expressions (RegExp)
-- [ ] Extract parameters using regular expressions (RegExp)
+- [X] OK
 
 ### Security
-- [ ] Include something like helmet
-- [ ] Extract safely JSON from body
-- [ ] Add schema check of input in POST
-- [ ] Add schema check of output in order to validate everything was OK
+- [ ] Include something like helmet (maybe Elysia Helmet)
+- [X] Extract safely JSON from body
+- [X] Add schema check of input in POST
+- [X] Add schema check of output in order to validate everything was OK
 
 ### Tests
-- [ ] Add test coverage
+- [ ] Add test coverage (WIP)
 
 ### Documentation
-- [ ] Write documentation
+- [ ] Write documentation (WIP)
 - [ ] Complete this README
-- [ ] Add examples
+- [ ] Add examples (input schema and output schema are missing)
 - [ ] Explain how middlewares are used
 - [ ] Explain how to use server reload on file change
+- [ ] Explain how to export this server as a module
+- [ ] Add SonarCloud score in this file
+- [ ] Explain why suretype vs zod or ajv
+- [ ] Explain how use extracted body
+- [ ] Explain middlewares, how to set it and safe extract is added each time in first step
 
 ### Other
 - [ ] Add server reload on file change
 - [ ] Standardize output request for routes handlers
 - [ ] Add SonarCloud evaluation
 - [ ] Add watcher for hot reload when exposed folders change
+- [X] Add SonarCloud
+- [ ] Test to export as a model
+- [ ] Remove source in main branch (automation)
 
 ## install
 To install dependencies:

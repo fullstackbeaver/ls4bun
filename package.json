@@ -1,21 +1,29 @@
 {
   "name": "ls4bun",
+  "main": "lib/index.js",
   "module": "src/index.ts",
-  "type": "module",
-  "main": "dist/index.js",
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.20.0",
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.21.0",
     "@types/bun": "latest",
     "@types/eslint": "^9.6.1",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
-    "eslint": "^9.20.1"
+    "@types/node": "^22.13.8",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.3"
   },
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "run_example": "bun run ./example/index.js",
+    "tests": "bun run ./scripts/runTests.ts"
+  },
+  "type": "module",
+  "types": "./lib/index.d.ts",
   "dependencies": {
-    "chokidar": "^4.0.3"
+    "suretype": "^3.3.1"
   }
 }
