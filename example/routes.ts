@@ -1,6 +1,5 @@
-import type { WorkRequest } from "../src";
-
-import { handleRoute } from "../src";
+import      { addStaticFolder, handleRoute } from "../src";
+import type { WorkRequest }                  from "../src";
 
 const base = "/api/v1";
 
@@ -21,5 +20,6 @@ export const exampleRoutes = {
     handler: (request: WorkRequest) => {
       return "Hello User "+request.params.id+"!";
     }
-  });}
+  });},
+  ...addStaticFolder(process.cwd()+"/dist", "/")
 };

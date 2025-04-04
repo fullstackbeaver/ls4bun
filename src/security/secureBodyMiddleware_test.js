@@ -16,7 +16,7 @@ describe("secure body from request to avoid XSS injections", () => {
   it("3. extractBody should throw an error with a POST request with a bad content-type", async () => {
     const request = new Request("https://example.com", { method: "POST", body: JSON.stringify({}), headers: { "content-type": "application/xml" } });
     await expect(extractBody(request)).rejects.toThrowError("400|Invalid content type. Expected application/json");
-  });1
+  });
 
   it("4. extractBody should return the body with a POST request with a good content-type", async () => {
     const request = bunRequestToWorkRequest(new Request("https://example.com", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ foo: "bar" }) }));
