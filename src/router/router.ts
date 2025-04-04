@@ -25,7 +25,8 @@ export function addStaticFolder(folder: string, exposedPath?: string) {
     return exposedPath+file;
   }
 
-  if (exposedPath === undefined) exposedPath = folder;
+  exposedPath ??= folder;
+  if (exposedPath === "/") exposedPath = "";
   const folderLength = folder.length;
   const index        = "index.html";
   const list         = getFolderContent(folder);
@@ -35,6 +36,7 @@ export function addStaticFolder(folder: string, exposedPath?: string) {
     result[reformatedUrl(file)] = staticFile(file);
   };
 
+  console.log("Folder", folder, result);
   return result;
 }
 
