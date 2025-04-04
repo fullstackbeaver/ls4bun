@@ -38,6 +38,7 @@ It is currently in development.
 - [ ] Add SonarCloud evaluation
 - [ ] Add watcher for hot reload when exposed folders change
 - [X] Add SonarCloud
+- [ ] Fix errors found by SonarCloud
 - [ ] Test to export as a model
 - [ ] Remove source in main branch (automation)
 

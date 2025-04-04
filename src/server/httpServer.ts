@@ -1,4 +1,4 @@
-import type { Middlewares, WorkingRequest } from "../server/httpServer_type";
+import type { Middlewares, WorkRequest } from "../server/httpServer_type";
 import type { BunRequest }                  from "bun";
 import type { RouteSpec }                   from "../router/router_type";
 import      { extractBody }                 from "security/secureBodyMiddleware";
@@ -21,7 +21,7 @@ const middlewares: Middlewares = {
  */
 export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, responseFn = makeResponse) {
 
-  const req = bunRequestToWorkingRequest(request);
+  const req = bunRequestToWorkRequest(request);
 
   for (const middleware of middlewares.before as Function[]) {
     await middleware(req);
@@ -33,11 +33,13 @@ export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, res
     await middleware(req);
   }
 
-  return responseFn(
-    req.result.body,
-    req.result.status,
-    req.result.headers
-  );
+  return typeof req.result === "string"
+    ? responseFn(req.result)
+    : responseFn(
+      req.result.body,
+      req.result.status,
+      req.result.headers
+    );
 }
 
 /**
@@ -55,14 +57,14 @@ export function useMiddlewares(middlewaresList: Middlewares) {
  *
  * @private This function is only exposed for testing purposes
  *
- * @param {WorkingRequest} request - The request object
+ * @param {WorkRequest} request - The request object
  * @param {RouteSpec}      routeSpec - The route specification
  *
  * @returns {Promise<RouteAnswer>} - The result of the route handler
  *
  * @throws {Error} - If the input or output of the handler does not match the schema
  */
-export async function runRoute(request: WorkingRequest, routeSpec: RouteSpec) {
+export async function runRoute(request: WorkRequest, routeSpec: RouteSpec) {
   const { handler, inputSchema, outputSchema } = routeSpec;
 
   if (inputSchema && !isValid(inputSchema, request.body)) throw new Error("400|wrong body data");
@@ -77,14 +79,14 @@ export async function runRoute(request: WorkingRequest, routeSpec: RouteSpec) {
 }
 
 /**
- * Creates a WorkingRequest object from a BunRequest object
+ * Creates a WorkRequest object from a BunRequest object
  * @private This function is only exposed for testing purposes
  * @param {BunRequest} request The BunRequest object to convert
  *
  * @private This function is only exposed for testing purposes
- * @returns {WorkingRequest} A WorkingRequest object
+ * @returns {WorkRequest} A WorkRequest object
  */
-export function bunRequestToWorkingRequest(request:BunRequest): WorkingRequest {
+export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
   return {
     body   : request.body,
     context: {},
@@ -93,5 +95,6 @@ export function bunRequestToWorkingRequest(request:BunRequest): WorkingRequest {
     result : {
       body: null
     },
+    url: request.url
   };
 }

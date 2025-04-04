@@ -1,4 +1,4 @@
-import type { WorkingRequest } from "server/httpServer_type";
+import type { WorkRequest } from "server/httpServer_type";
 import      { isString }       from "utils/utils";
 
 export function sanitizeInput(input: unknown): unknown { //export for tests
@@ -40,7 +40,7 @@ function sanityzeString(input: string): string {
   return input.replace(/[&<>"'/]/g, (match) => replacements[match] ?? match);
 }
 
-export async function extractBody(request: WorkingRequest): Promise<unknown> {
+export async function extractBody(request: WorkRequest): Promise<unknown> {
   if (
     request.method === "GET"     ||
     request.method === "DELETE"  ||
