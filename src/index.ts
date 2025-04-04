@@ -17,7 +17,7 @@ export {
 } from "./router/router";
 
 export type {
-  WorkingRequest
+  WorkRequest
 } from "./server/httpServer_type";
 
 export type {

@@ -1,5 +1,5 @@
 import { extractBody, sanitizeInput } from "./secureBodyMiddleware";
-import { bunRequestToWorkingRequest } from "../server/httpServer";
+import { bunRequestToWorkRequest }    from "../server/httpServer";
 
 
 describe("secure body from request to avoid XSS injections", () => {
@@ -19,7 +19,7 @@ describe("secure body from request to avoid XSS injections", () => {
   });1
 
   it("4. extractBody should return the body with a POST request with a good content-type", async () => {
-    const request = bunRequestToWorkingRequest(new Request("https://example.com", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ foo: "bar" }) }));
+    const request = bunRequestToWorkRequest(new Request("https://example.com", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ foo: "bar" }) }));
     await extractBody(request);
     expect(request.body).toEqual({ foo: "bar" });
   });
@@ -40,17 +40,21 @@ describe("secure body from request to avoid XSS injections", () => {
     };
 
     const expectedOutput = {
-      "username": "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;",
-      "email": "test@example.com",
-      "profile": {
-        "firstName": "John",
-        "lastName": "&lt;strong&gt;Doe&lt;/strong&gt;",
-        "address": {
-          "city": "Paris",
-          "zipCode": "75001"
+      username: "&lt;script&gt;alert(&#39;XSS&#39;)&lt;&#x2F;script&gt;",
+      email   : "test@example.com",
+      profile : {
+        firstName: "John",
+        lastName: "&lt;strong&gt;Doe&lt;&#x2F;strong&gt;",
+        address  : {
+          city   : "Paris",
+          zipCode: "75001"
         }
       },
-      "hobbies": ["coding", "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;", "reading"]
+      hobbies: [
+        "coding",
+        "&lt;script&gt;alert(&#39;XSS&#39;)&lt;&#x2F;script&gt;",
+        "reading"
+      ]
     };
 
     expect(sanitizeInput(input)).toEqual(expectedOutput);
