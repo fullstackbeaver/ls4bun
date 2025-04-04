@@ -1,15 +1,16 @@
-import type { WorkRequest }    from "../src";
+import type { WorkRequest }    from "../lib";
 import      { exampleRoutes }  from "./routes";
-import      { useMiddlewares } from "../src";
+import      { useMiddlewares } from "../lib";
 
 Bun.serve({
   error(error) {
+    console.error(error);
     const [status, msg] = error.message.split("|");
     return new Response(msg, {
       headers: {
         "Content-Type": "text/html",
       },
-      status: parseInt(status),
+      status: parseInt(status) ?? 500,
     });
   },
   port  : 4002,

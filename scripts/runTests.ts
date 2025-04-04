@@ -12,7 +12,7 @@ console.log("Application lancée, attente de 2 secondes pour être sûr qu\"elle
 await setTimeout(2000);
 
 try {
-  const testProcess = spawnSync("bun", ["test"], {
+  const testProcess = spawnSync("bun", ["test"], { //NOSONAR
     stdio: "inherit",
   });
 

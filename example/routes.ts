@@ -1,25 +1,26 @@
-import      { addStaticFolder, handleRoute } from "../src";
-import type { WorkRequest }                  from "../src";
+import      { addStaticFolder, handleRoute } from "../lib";
+import      { BunRequest }                   from "bun";
+import type { WorkRequest }                  from "../lib";
 
 const base = "/api/v1";
 
 export const exampleRoutes = {
-  [base+"/posts"]: req => handleRoute(req, {
+  [base+"/posts"]: (req:BunRequest) => handleRoute(req, {
     handler: () => {
       return "List posts";
     }
   }),
-  [base+"/users/:id"]: req => { return handleRoute(req,{
+  [base+"/users/:id"]: (req:BunRequest) => { return handleRoute(req,{
     handler: (request: WorkRequest) => {
       return {
         body: "Hello User "+request.params.id+"!"
       };
     }
   }); },
-  [base+"/routeWithMiddleware/:id"]: req => { return handleRoute(req,{
+  [base+"/routeWithMiddleware/:id"]: (req:BunRequest) => { return handleRoute(req,{
     handler: (request: WorkRequest) => {
       return "Hello User "+request.params.id+"!";
     }
   });},
-  ...addStaticFolder(process.cwd()+"/dist", "/")
+  ...addStaticFolder(__dirname+"/dist", "/")
 };
