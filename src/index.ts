@@ -26,3 +26,7 @@ export type {
 export {
   makeResponse
 } from "./response/response";
+
+export {
+  sanitizeString
+} from "./utils/utils";

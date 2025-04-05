@@ -1,3 +1,4 @@
+import      { Method }      from "./httpServer_constants";
 import type { RouteAnswer } from "../../router/router_type";
 
 export type WorkRequest = {
@@ -6,7 +7,7 @@ export type WorkRequest = {
   headers: Headers & {
     authorization?: string
   }
-  method : "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS"
+  method : keyof typeof Method
   params?: Record<string, string>
   query ?: URLSearchParams | null
   result : RouteAnswer

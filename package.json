@@ -22,5 +22,8 @@
     "tests": "bun run ./scripts/runTests.ts"
   },
   "type": "module",
-  "types": "./lib/index.d.ts"
+  "types": "./lib/index.d.ts",
+  "dependencies": {
+    "isomorphic-dompurify": "^2.23.0"
+  }
 }

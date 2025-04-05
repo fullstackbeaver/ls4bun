@@ -1,6 +1,7 @@
 import type { Middlewares, ValidationFunction, WorkRequest } from "./httpServer_type";
 import      { isString, sanitizeInput }                      from "utils/utils";
 import type { BunRequest }                                   from "bun";
+import      { Method }                                       from "./httpServer_constants";
 import type { RouteSpec }                                    from "../router/router_type";
 import      { makeResponse }                                 from "../response/response";
 
@@ -93,9 +94,9 @@ export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
     body   : extractBody(request),
     context: {},
     headers: request.headers,
-    method : request.method as "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS",
+    method : request.method as keyof typeof Method,
     params : request.params,
-    query  : (request?.url).includes("?")
+    query  : request.url.includes("?")
       ? new URLSearchParams(request.url.split("?")[1])
       : null,
     result: {
@@ -105,11 +106,20 @@ export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
   };
 }
 
+/**
+ * Extracts and sanitizes the JSON body from a BunRequest object.
+ *
+ * @param {BunRequest} request - The BunRequest object to extract the body from.
+ *
+ * @returns {Promise<Record<string, any> | null>} A promise that resolves to the extracted and sanitized body as a record, or null if the request method is GET, DELETE, OPTIONS, or if there is no body.
+ *
+ * @throws {Error} Throws an error if the content type is not "application/json" or if the body cannot be parsed as JSON.
+ */
 export async function extractBody(request: BunRequest): Promise<Record<string, any> | null> { //exported for testing
   if (
-    request.method === "GET"     ||
-    request.method === "DELETE"  ||
-    request.method === "OPTIONS" ||
+    request.method === Method.GET     ||
+    request.method === Method.DELETE  ||
+    request.method === Method.OPTIONS ||
     !request.body
   ) return null;
 
@@ -119,11 +129,18 @@ export async function extractBody(request: BunRequest): Promise<Record<string, a
 
   try {
     return sanitizeInput(await JSON.parse(request.body.toString())) as Record<string, any>;
-  } catch (e) { // eslint-disable-line no-unused-vars
-    throw new Error("400|Invalid body");
+  } catch (e) {
+    throw new Error("400|Invalid body\n" + (e instanceof Error ? e.message : e));
   }
 }
 
+/**
+ * Sets the validation function to be used for validating input and output schemas.
+ *
+ * @param {ValidationFunction} validatorFn - The function that performs validation.
+ *
+ * @returns {void}
+ */
 export function useValidator(validatorFn: ValidationFunction) {
   validaton = validatorFn;
 }

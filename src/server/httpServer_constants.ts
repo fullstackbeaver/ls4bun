@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 export enum Method {
+  DELETE = "DELETE",
   GET    = "GET",
-  POST   = "POST",
-  PUT    = "PUT",
+  OPTIONS= "OPTIONS",
   PATCH  = "PATCH",
-  DELETE = "DELETE"
+  POST   = "POST",
+  PUT    = "PUT"
 }

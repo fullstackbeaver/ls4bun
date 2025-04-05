@@ -1,6 +1,6 @@
 import type { WorkRequest }    from "../lib";
 import      { exampleRoutes }  from "./routes";
-import      { useMiddlewares } from "../src";
+import      { useMiddlewares } from "../lib";
 
 Bun.serve({
   error(error) {

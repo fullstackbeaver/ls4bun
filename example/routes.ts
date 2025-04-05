@@ -1,6 +1,6 @@
-import      { addStaticFolder, handleRoute } from "../src";
-import type { BunRequest }                   from "bun";
-import type { WorkRequest }                  from "../lib";
+import      { addStaticFolder, handleRoute, sanitizeString } from "../lib";
+import type { BunRequest }                                   from "bun";
+import type { WorkRequest }                                  from "../lib";
 
 /* if you want to use the validator, of course you need to import your library. In following example it's `zod` */
 
@@ -26,7 +26,8 @@ export const exampleRoutes = {
 
   [base+"/routeWithQuery"]: (req:BunRequest) =>  handleRoute(req,{
     handler: (request: WorkRequest) => {
-      return "ok "+request.query?.get("foo");
+      const query = sanitizeString(request.query?.get("foo") || "");
+      return "ok "+query;
     }
   }),
 

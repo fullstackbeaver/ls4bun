@@ -40,5 +40,21 @@ export declare function runRoute(request: WorkRequest, routeSpec: RouteSpec): Pr
  * @returns {WorkRequest} A WorkRequest object
  */
 export declare function bunRequestToWorkRequest(request: BunRequest): WorkRequest;
+/**
+ * Extracts and sanitizes the JSON body from a BunRequest object.
+ *
+ * @param {BunRequest} request - The BunRequest object to extract the body from.
+ *
+ * @returns {Promise<Record<string, any> | null>} A promise that resolves to the extracted and sanitized body as a record, or null if the request method is GET, DELETE, OPTIONS, or if there is no body.
+ *
+ * @throws {Error} Throws an error if the content type is not "application/json" or if the body cannot be parsed as JSON.
+ */
 export declare function extractBody(request: BunRequest): Promise<Record<string, any> | null>;
+/**
+ * Sets the validation function to be used for validating input and output schemas.
+ *
+ * @param {ValidationFunction} validatorFn - The function that performs validation.
+ *
+ * @returns {void}
+ */
 export declare function useValidator(validatorFn: ValidationFunction): void;

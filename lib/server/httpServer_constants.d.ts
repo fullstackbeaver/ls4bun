@@ -1,7 +1,8 @@
 export declare enum Method {
+    DELETE = "DELETE",
     GET = "GET",
-    POST = "POST",
-    PUT = "PUT",
+    OPTIONS = "OPTIONS",
     PATCH = "PATCH",
-    DELETE = "DELETE"
+    POST = "POST",
+    PUT = "PUT"
 }

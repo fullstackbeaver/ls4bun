@@ -43,11 +43,11 @@ describe("secure body from request to avoid XSS injections", () => {
     };
 
     const expectedOutput = {
-      username: "&lt;script&gt;alert(&#39;XSS&#39;)&lt;&#x2F;script&gt;",
+      username: "",
       email   : "test@example.com",
       profile : {
         firstName: "John",
-        lastName: "&lt;strong&gt;Doe&lt;&#x2F;strong&gt;",
+        lastName: "<strong>Doe</strong>",
         address  : {
           city   : "Paris",
           zipCode: "75001"
@@ -55,7 +55,7 @@ describe("secure body from request to avoid XSS injections", () => {
       },
       hobbies: [
         "coding",
-        "&lt;script&gt;alert(&#39;XSS&#39;)&lt;&#x2F;script&gt;",
+        "",
         "reading"
       ]
     };
