@@ -33,14 +33,22 @@ It is currently in development.
 - [ ] Explain middlewares, how to set it and safe extract is added each time in first step
 
 ### Other
-- [ ] Add server reload on file change
+- [ ] Add automatic server restart on file change (using an external library: ls4bun-watcher)
 - [ ] Standardize output request for routes handlers
-- [ ] Add SonarCloud evaluation
 - [ ] Add watcher for hot reload when exposed folders change
 - [X] Add SonarCloud
-- [ ] Fix errors found by SonarCloud
+- [X] Add SonarCloud evaluation
+- [X] Fix errors found by SonarCloud
 - [ ] Test to export as a model
 - [ ] Remove source in main branch (automation)
+
+## security
+ls4bun natively includes security elements:
+* the body of requests is cleaned to prevent XSS attacks and manages the possibility of a malformed json used sometimes in DDOS attacks
+* to prevent XSS attacks in queries, a function sanitizeString is available
+* ls4bun ensures the possibility of checking input and output schemas if necessary. The validation can be done with the library of your choice.
+
+The cleaning for XSS attacks is ensured by the [isomorphic-dompurify](https://github.com/kkomelin/isomorphic-dompurify) module.
 
 ## install
 To install dependencies:
@@ -107,5 +115,19 @@ Follow the existing coding conventions in the project.
 Write clear comments and use meaningful variable names.
 Add tests for your changes if possible.
 
-### Reporting a Bug
+### Reporting a Bug
 If you find a bug, please open an issue with a detailed description of the problem and steps to reproduce it.
+
+## Sonar Cloud evaluation
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fullstackbeaver_ls4bun&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fullstackbeaver_ls4bun)
