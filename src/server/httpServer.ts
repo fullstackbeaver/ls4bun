@@ -1,14 +1,15 @@
-import type { Middlewares, WorkRequest } from "../server/httpServer_type";
-import type { BunRequest }                  from "bun";
-import type { RouteSpec }                   from "../router/router_type";
-import      { extractBody }                 from "security/secureBodyMiddleware";
-import      { isValid }                     from "suretype";
-import      { makeResponse }                from "../response/response";
+import type { Middlewares, ValidationFunction, WorkRequest } from "./httpServer_type";
+import      { isString, sanitizeInput }                      from "utils/utils";
+import type { BunRequest }                                   from "bun";
+import type { RouteSpec }                                    from "../router/router_type";
+import      { makeResponse }                                 from "../response/response";
 
 const middlewares: Middlewares = {
   after : [],
-  before: [extractBody]
+  before: []
 };
+
+let validaton:ValidationFunction;
 
 /**
  * Run a route handler on a given request.
@@ -33,7 +34,7 @@ export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, res
     await middleware(req);
   }
 
-  return typeof req.result === "string"
+  return isString(req.result)
     ? responseFn(req.result)
     : responseFn(
       req.result.body,
@@ -57,8 +58,8 @@ export function useMiddlewares(middlewaresList: Middlewares) {
  *
  * @private This function is only exposed for testing purposes
  *
- * @param {WorkRequest} request - The request object
- * @param {RouteSpec}      routeSpec - The route specification
+ * @param {WorkRequest} request   - The request object
+ * @param {RouteSpec}   routeSpec - The route specification
  *
  * @returns {Promise<RouteAnswer>} - The result of the route handler
  *
@@ -67,13 +68,13 @@ export function useMiddlewares(middlewaresList: Middlewares) {
 export async function runRoute(request: WorkRequest, routeSpec: RouteSpec) {
   const { handler, inputSchema, outputSchema } = routeSpec;
 
-  if (inputSchema && !isValid(inputSchema, request.body)) throw new Error("400|wrong body data");
+  if (inputSchema && !validaton(inputSchema, request.body)) throw new Error("400|wrong body data");
 
   const result = handler.constructor.name === "AsyncFunction"
     ? await handler(request)
     : handler(request);
 
-  if (outputSchema && !isValid(outputSchema, result)) throw new Error("500|result is not as expected");
+  if (outputSchema && !validaton(outputSchema, result)) throw new Error("500|result is not as expected");
 
   return result;
 }
@@ -81,20 +82,48 @@ export async function runRoute(request: WorkRequest, routeSpec: RouteSpec) {
 /**
  * Creates a WorkRequest object from a BunRequest object
  * @private This function is only exposed for testing purposes
- * @param {BunRequest} request The BunRequest object to convert
+ * @param {BunRequest} request The BunRequest object to convert
  *
  * @private This function is only exposed for testing purposes
  * @returns {WorkRequest} A WorkRequest object
  */
 export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
+
   return {
-    body   : request.body,
+    body   : extractBody(request),
     context: {},
     headers: request.headers,
+    method : request.method as "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS",
     params : request.params,
-    result : {
+    query  : (request?.url).includes("?")
+      ? new URLSearchParams(request.url.split("?")[1])
+      : null,
+    result: {
       body: null
     },
     url: request.url
   };
+}
+
+export async function extractBody(request: BunRequest): Promise<Record<string, any> | null> { //exported for testing
+  if (
+    request.method === "GET"     ||
+    request.method === "DELETE"  ||
+    request.method === "OPTIONS" ||
+    !request.body
+  ) return null;
+
+  const contentType = request.headers.get("content-type");
+
+  if (contentType !== "application/json") throw new Error("400|Invalid content type. Expected application/json");
+
+  try {
+    return sanitizeInput(await JSON.parse(request.body.toString())) as Record<string, any>;
+  } catch (e) { // eslint-disable-line no-unused-vars
+    throw new Error("400|Invalid body");
+  }
+}
+
+export function useValidator(validatorFn: ValidationFunction) {
+  validaton = validatorFn;
 }

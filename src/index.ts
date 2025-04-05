@@ -3,12 +3,9 @@ export {
 } from "./server/httpServer_constants";
 
 export {
-  extractBody
-} from "./security/secureBodyMiddleware";
-
-export {
   handleRoute,
-  useMiddlewares
+  useMiddlewares,
+  useValidator
 } from "./server/httpServer";
 
 export {

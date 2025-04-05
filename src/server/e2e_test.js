@@ -34,6 +34,13 @@ describe("End-to-end tests", () => {
     expect(await response.text()).toBe(expedectedResponse4);
     expect(response.status).toBe(401);
   });
+
+  const route5              = base+"/routeWithQuery?foo=bar";
+  const expedectedResponse5 = "ok bar";
+  it(title(route5, expedectedResponse5), async () => {
+    const response = await fetch(route5);
+    expect(await response.text()).toBe(expedectedResponse5);
+  });
 });
 
 /**

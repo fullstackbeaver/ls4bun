@@ -1,6 +1,6 @@
 import type { WorkRequest }    from "../lib";
 import      { exampleRoutes }  from "./routes";
-import      { useMiddlewares } from "../lib";
+import      { useMiddlewares } from "../src";
 
 Bun.serve({
   error(error) {
@@ -23,3 +23,13 @@ useMiddlewares({
       if (req.url.includes("/routeWithMiddleware") && req.headers?.get("authorization") !== "Bearer xxxxx") throw new Error("401|Unauthorized");
     }]
 });
+
+/*
+if you want to use validator schema directly in routes, you need
+to register a function that validates the schema like this one.
+In this example, the library used is zod.
+useValidator((schema: any, data: unknown) => {
+  const result = schema.safeParse(data);
+  return result.success;
+});
+*/

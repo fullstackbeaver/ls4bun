@@ -1,4 +1,4 @@
-import type { Middlewares, WorkRequest } from "../server/httpServer_type";
+import type { Middlewares, ValidationFunction, WorkRequest } from "./httpServer_type";
 import type { BunRequest } from "bun";
 import type { RouteSpec } from "../router/router_type";
 import { makeResponse } from "../response/response";
@@ -23,8 +23,8 @@ export declare function useMiddlewares(middlewaresList: Middlewares): void;
  *
  * @private This function is only exposed for testing purposes
  *
- * @param {WorkRequest} request - The request object
- * @param {RouteSpec}      routeSpec - The route specification
+ * @param {WorkRequest} request   - The request object
+ * @param {RouteSpec}   routeSpec - The route specification
  *
  * @returns {Promise<RouteAnswer>} - The result of the route handler
  *
@@ -34,9 +34,11 @@ export declare function runRoute(request: WorkRequest, routeSpec: RouteSpec): Pr
 /**
  * Creates a WorkRequest object from a BunRequest object
  * @private This function is only exposed for testing purposes
- * @param {BunRequest} request The BunRequest object to convert
+ * @param {BunRequest} request The BunRequest object to convert
  *
  * @private This function is only exposed for testing purposes
  * @returns {WorkRequest} A WorkRequest object
  */
 export declare function bunRequestToWorkRequest(request: BunRequest): WorkRequest;
+export declare function extractBody(request: BunRequest): Promise<Record<string, any> | null>;
+export declare function useValidator(validatorFn: ValidationFunction): void;

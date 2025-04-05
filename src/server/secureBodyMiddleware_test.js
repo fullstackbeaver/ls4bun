@@ -1,11 +1,10 @@
-import { extractBody, sanitizeInput } from "./secureBodyMiddleware";
-import { bunRequestToWorkRequest }    from "../server/httpServer";
-
+import { extractBody }   from "./httpServer";
+import { sanitizeInput } from "../utils/utils";
 
 describe("secure body from request to avoid XSS injections", () => {
-  it("1. extractBody should return undefined with a GET request", async () => {
+  it("1. extractBody should return null with a GET request", async () => {
     const request = new Request("https://example.com", { method: "GET" });
-    expect(await extractBody(request)).toBeUndefined();
+    expect(await extractBody(request)).toEqual(null);
   });
 
   it("2. extractBody should throw an error with a POST request without content-type", async () => {
@@ -19,9 +18,13 @@ describe("secure body from request to avoid XSS injections", () => {
   });
 
   it("4. extractBody should return the body with a POST request with a good content-type", async () => {
-    const request = bunRequestToWorkRequest(new Request("https://example.com", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ foo: "bar" }) }));
-    await extractBody(request);
-    expect(request.body).toEqual({ foo: "bar" });
+    const result = await extractBody( {
+      body   : JSON.stringify({ foo: "bar" }),
+      headers: new Headers({ "content-type": "application/json" }),
+      method : "POST",
+      url    : "https://example.com"
+    });
+    expect(result).toEqual({ foo: "bar" });
   });
 
   it("5. should sanitize the input correctly", () => {

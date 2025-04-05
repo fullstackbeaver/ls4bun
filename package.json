@@ -22,8 +22,5 @@
     "tests": "bun run ./scripts/runTests.ts"
   },
   "type": "module",
-  "types": "./lib/index.d.ts",
-  "dependencies": {
-    "suretype": "^3.3.1"
-  }
+  "types": "./lib/index.d.ts"
 }
