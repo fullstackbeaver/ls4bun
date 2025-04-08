@@ -27,7 +27,6 @@ It is currently in development.
 - [ ] Explain how middlewares are used
 - [ ] Explain how to use server reload on file change
 - [ ] Explain how to export this server as a module
-- [ ] Add SonarCloud score in this file
 - [ ] Explain why suretype vs zod or ajv
 - [ ] Explain how use extracted body
 - [ ] Explain middlewares, how to set it and safe extract is added each time in first step
