@@ -13,7 +13,7 @@ export const exampleRoutes = {
   [base+"/users/:id"]: (req:BunRequest) => { return handleRoute(req,{
     handler: (request: WorkRequest) => {
       return {
-        body: "Hello User "+request.params?.id+"!"
+        user: "Hello User "+request.params?.id+"!"
       };
     }
   }); },

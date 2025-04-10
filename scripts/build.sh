@@ -13,4 +13,4 @@ cp src/router/*.d.ts     lib/router/
 cp src/server/*.d.ts     lib/server/
 
 ##### compilation de l'application
-bun build ./src/index.ts --outdir ./lib --minify --target bun --minify --packages external
+bun build ./src/index.ts --outdir ./lib --minify --target bun --packages external

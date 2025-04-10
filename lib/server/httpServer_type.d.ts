@@ -14,9 +14,11 @@ export type WorkRequest = {
   url    : string
 }
 
+export type MiddlewareFunction = (req:WorkRequest) => Promise<void>;  // eslint-disable-line
+
 export type Middlewares = {
-  after ?: Function[]
-  before?: Function[]
+  after ?: MiddlewareFunction[]
+  before?: MiddlewareFunction[]
 }
 
 export type ValidationFunction = (schema: any, data: any) => boolean; // eslint-disable-line

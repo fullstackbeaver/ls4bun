@@ -1,9 +1,9 @@
-import type { Middlewares, ValidationFunction, WorkRequest } from "./httpServer_type";
-import      { isString, sanitizeInput }                      from "utils/utils";
-import type { BunRequest }                                   from "bun";
-import      { Method }                                       from "./httpServer_constants";
-import type { RouteSpec }                                    from "../router/router_type";
-import      { makeResponse }                                 from "../response/response";
+import type { MiddlewareFunction, Middlewares, ValidationFunction, WorkRequest } from "./httpServer_type";
+import type { BunRequest }                                                       from "bun";
+import      { Method }                                                           from "./httpServer_constants";
+import type { RouteSpec }                                                        from "../router/router_type";
+import      { makeResponse }                                                     from "../response/response";
+import      { sanitizeInput }                                                    from "utils/utils";
 
 const middlewares: Middlewares = {
   after : [],
@@ -25,23 +25,24 @@ export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, res
 
   const req = bunRequestToWorkRequest(request);
 
-  for (const middleware of middlewares.before as Function[]) {
-    await middleware(req);
-  }
+  middlewares.before && await runMiddlewares ( middlewares.before, req );
 
-  req.result = await runRoute(req, routeSpec);
+  const result = await runRoute(req, routeSpec);
 
-  for (const middleware of middlewares.after as Function[]) {
-    await middleware(req);
-  }
+  if (result.status ) req.result.status = result.status;
+  if (result.headers) req.result.headers = {
+    ...req.result.headers,
+    ...result.headers
+  };
+  req.result.body = result.body ?? result;
 
-  return isString(req.result)
-    ? responseFn(req.result)
-    : responseFn(
-      req.result.body,
-      req.result.status,
-      req.result.headers
-    );
+  middlewares.after && await runMiddlewares ( middlewares.after, req );
+
+  return responseFn(
+    req.result.body,
+    req.result.status,
+    req.result.headers
+  );
 }
 
 /**
@@ -49,9 +50,9 @@ export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, res
  *
  * @param {Middlewares} middlewaresList - The list of middlewares functions to run.
  */
-export function useMiddlewares(middlewaresList: Middlewares) {
-  if (middlewaresList.before) middlewares.before = middlewaresList.before;
-  if (middlewaresList.after)  middlewares.after  = middlewaresList.after;
+export function useMiddlewares({ after, before }: Middlewares) {
+  if (before) middlewares.before = before;
+  if (after)  middlewares.after  = after;
 }
 
 /**
@@ -66,8 +67,7 @@ export function useMiddlewares(middlewaresList: Middlewares) {
  *
  * @throws {Error} - If the input or output of the handler does not match the schema
  */
-export async function runRoute(request: WorkRequest, routeSpec: RouteSpec) {
-  const { handler, inputSchema, outputSchema } = routeSpec;
+export async function runRoute(request: WorkRequest,  { handler, inputSchema, outputSchema }: RouteSpec) {
 
   if (inputSchema && !validaton(inputSchema, request.body)) throw new Error("400|wrong body data");
 
@@ -88,7 +88,7 @@ export async function runRoute(request: WorkRequest, routeSpec: RouteSpec) {
  * @private This function is only exposed for testing purposes
  * @returns {WorkRequest} A WorkRequest object
  */
-export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
+function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
 
   return {
     body   : extractBody(request),
@@ -101,7 +101,7 @@ export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
       : null,
     result: {
       body   : null,
-      headers: {},
+      headers: new Headers()
     },
     url: request.url
   };
@@ -144,4 +144,19 @@ export async function extractBody(request: BunRequest): Promise<Record<string, a
  */
 export function useValidator(validatorFn: ValidationFunction) {
   validaton = validatorFn;
+}
+
+/**
+ * Runs an array of middlewares, passing the WorkRequest object to each one.
+ *
+ * @param {MiddlewareFunction[]} middlewares - The array of middlewares to run.
+ * @param {WorkRequest}          wRequest    - The WorkRequest object to pass to each middleware.
+ *
+ * @returns {Promise<void>} - A promise that resolves when all middlewares have completed.
+ */
+async function runMiddlewares(middlewares:MiddlewareFunction[], wRequest:WorkRequest) {
+  for (const middleware of middlewares) {
+    // typeof middleware === "function" &&
+    await middleware(wRequest);
+  }
 }

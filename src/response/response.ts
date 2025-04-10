@@ -10,18 +10,22 @@ import      { isString }        from "../utils/utils";
  *
  * @returns {Response}
  */
-export function makeResponse( body:RouteAnswerBody, status = 200, customHeaders = {} ) {
+export function makeResponse( body:RouteAnswerBody, status = 200, customHeaders = new Headers() ) {
 
   if (status >=300 && status < 400) return Response.redirect(body as string, status);
 
-  const headers = new Headers();
-  for (const [key, value] of Object.entries(customHeaders)) {
-    headers.set(key, isString(value) ? value : `${value}`);
-  }
+  const options = {
+    headers: customHeaders,
+    status
+  };
 
-  if (body === null)  return new Response("",{ headers, status });
+  // for (const [key, value] of Object.entries(customHeaders)) {
+  //   options.headers.set(key, isString(value) ? value : `${value}`);
+  // }
 
-  if (isString(body)) return new Response(body, { headers, status });
+  if (body === null)  return new Response("",options);
 
-  return Response.json(body, { headers, status });
+  if (isString(body)) return new Response(body, options);
+
+  return Response.json(body, options);
 }

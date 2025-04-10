@@ -17,7 +17,7 @@ export declare function handleRoute(request: BunRequest, routeSpec: RouteSpec, r
  *
  * @param {Middlewares} middlewaresList - The list of middlewares functions to run.
  */
-export declare function useMiddlewares(middlewaresList: Middlewares): void;
+export declare function useMiddlewares({ after, before }: Middlewares): void;
 /**
  * Run a route handler, checks the input and output of the handler using the suretype library
  *
@@ -30,16 +30,7 @@ export declare function useMiddlewares(middlewaresList: Middlewares): void;
  *
  * @throws {Error} - If the input or output of the handler does not match the schema
  */
-export declare function runRoute(request: WorkRequest, routeSpec: RouteSpec): Promise<any>;
-/**
- * Creates a WorkRequest object from a BunRequest object
- * @private This function is only exposed for testing purposes
- * @param {BunRequest} request The BunRequest object to convert
- *
- * @private This function is only exposed for testing purposes
- * @returns {WorkRequest} A WorkRequest object
- */
-export declare function bunRequestToWorkRequest(request: BunRequest): WorkRequest;
+export declare function runRoute(request: WorkRequest, { handler, inputSchema, outputSchema }: RouteSpec): Promise<any>;
 /**
  * Extracts and sanitizes the JSON body from a BunRequest object.
  *

@@ -18,6 +18,12 @@ Bun.serve({
 });
 
 useMiddlewares({
+
+  after: [
+    async (req:WorkRequest) => {
+      req.result.headers.set("Cache-Control", "no-cache");
+    }
+  ],
   before: [
     async (req:WorkRequest) => {
       if (req.url.includes("/routeWithMiddleware") && req.headers?.get("authorization") !== "Bearer xxxxx") throw new Error("401|Unauthorized");

@@ -8,4 +8,4 @@ import type { RouteAnswerBody } from "router/router_type";
  *
  * @returns {Response}
  */
-export declare function makeResponse(body: RouteAnswerBody, status?: number, customHeaders?: {}): Response;
+export declare function makeResponse(body: RouteAnswerBody, status?: number, customHeaders?: Headers): Response;

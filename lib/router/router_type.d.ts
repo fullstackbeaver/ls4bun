@@ -1,6 +1,8 @@
+import { Headers } from "bun";
+
 export type RouteAnswer = {
   body    : RouteAnswerBody
-  headers : Record<string, string>;
+  headers : Headers //Record<string, string>;
   status ?: number                  // useful for some variants of 200 like 206
 }
 
@@ -15,3 +17,8 @@ export type RouteSpec = {
 export type StaticRoutes = {
   [key: string]: Function
 }
+
+// type Headers = {
+//   get: (key: string) => string
+//   set: (key: string, value: string) => void
+// }
