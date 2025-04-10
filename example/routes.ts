@@ -30,7 +30,6 @@ export const exampleRoutes = {
       return "ok "+query;
     }
   }),
-
   /*
   example how to use validator for input (available also for output)
   [base+"/add"]: {

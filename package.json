@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "./scripts/build.sh",
-    "run_example": "bun run ./example/index.js",
+    "run_example": "bun --watch run ./example/index.js",
     "tests": "bun run ./scripts/runTests.ts"
   },
   "type": "module",

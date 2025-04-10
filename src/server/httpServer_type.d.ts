@@ -1,5 +1,5 @@
 import      { Method }      from "./httpServer_constants";
-import type { RouteAnswer } from "../../router/router_type";
+import type { RouteAnswer } from "../router/router_type";
 
 export type WorkRequest = {
   body   : Record<string, any> | null
@@ -19,4 +19,4 @@ export type Middlewares = {
   before?: Function[]
 }
 
-export type ValidationFunction = (schema: any, data: any) => boolean;
+export type ValidationFunction = (schema: any, data: any) => boolean; // eslint-disable-line

@@ -1,7 +1,7 @@
 export type RouteAnswer = {
-  body    : RouteAnswerBody;
-  headers?: Record<string, string>;
-  status ?: number;                  // useful for some variants of 200 like 206
+  body    : RouteAnswerBody
+  headers : Record<string, string>;
+  status ?: number                  // useful for some variants of 200 like 206
 }
 
 export type RouteAnswerBody = string | object | null
@@ -13,5 +13,5 @@ export type RouteSpec = {
 }
 
 export type StaticRoutes = {
-  [key: string]: Function<Response>
+  [key: string]: Function
 }

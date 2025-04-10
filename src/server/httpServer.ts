@@ -100,7 +100,8 @@ export function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
       ? new URLSearchParams(request.url.split("?")[1])
       : null,
     result: {
-      body: null
+      body   : null,
+      headers: {},
     },
     url: request.url
   };
