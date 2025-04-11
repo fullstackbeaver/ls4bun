@@ -19,10 +19,6 @@ export function makeResponse( body:RouteAnswerBody, status = 200, customHeaders 
     status
   };
 
-  // for (const [key, value] of Object.entries(customHeaders)) {
-  //   options.headers.set(key, isString(value) ? value : `${value}`);
-  // }
-
   if (body === null)  return new Response("",options);
 
   if (isString(body)) return new Response(body, options);
