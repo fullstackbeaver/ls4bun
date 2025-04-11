@@ -25,18 +25,24 @@ export async function handleRoute(request: BunRequest, routeSpec: RouteSpec, res
 
   const req = bunRequestToWorkRequest(request);
 
-  middlewares.before && await runMiddlewares ( middlewares.before, req );
+  middlewares.before && await runMiddlewares(middlewares.before, req);
 
   const result = await runRoute(req, routeSpec);
 
-  if (result.status ) req.result.status = result.status;
-  if (result.headers) req.result.headers = {
-    ...req.result.headers,
-    ...result.headers
-  };
+  if (result.status) req.result.status = result.status;
+  if (result.headers) {
+    const headers = (typeof result.headers.get === "function")
+      ? result.headers.entries()
+      : Object.entries(result.headers);
+
+    for (const [key, value] of headers) {
+      req.result.headers.set(key, value);
+    }
+  }
+
   req.result.body = result.body ?? result;
 
-  middlewares.after && await runMiddlewares ( middlewares.after, req );
+  middlewares.after && await runMiddlewares(middlewares.after, req);
 
   return responseFn(
     req.result.body,
