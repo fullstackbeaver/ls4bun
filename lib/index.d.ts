@@ -4,4 +4,4 @@ export { addStaticFolder, staticFile } from "./router/router";
 export type { WorkRequest } from "./server/httpServer_type";
 export type { RouteAnswer, RouteSpec, StaticRoutes } from "./router/router_type";
 export { makeResponse } from "./response/response";
-export { sanitizeString } from "./utils/utils";
+export { sanitizeInput, sanitizeString } from "./utils/utils";

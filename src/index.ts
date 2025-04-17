@@ -28,5 +28,6 @@ export {
 } from "./response/response";
 
 export {
+  sanitizeInput,
   sanitizeString
 } from "./utils/utils";
