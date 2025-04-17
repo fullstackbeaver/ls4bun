@@ -23,20 +23,22 @@ describe("handleRoute", () => {
   it("1. should run middlewares and route handler", async () => {
     const request   = { method: "GET", headers: {}, url: "https://example.com" };
     const routeSpec = {
-      handler: () => contentResult
+      handler: (req) => contentResult
     };
-
-    const makeResponseSpy = spyOn({ makeResponse: originalMakeResponse }, "makeResponse");
-
-    await handleRoute(request, routeSpec, makeResponseSpy);
-
-    expect(makeResponseSpy).toHaveBeenCalledWith("Hello, World!15", 599, undefined);
+    const responseWrapper = {
+      makeResponse: (body, status, headers) => {
+        return new Response(body, { status, headers });
+      }
+    };
+    const spy = spyOn(responseWrapper, "makeResponse");
+    await handleRoute(request, routeSpec, responseWrapper.makeResponse);
+    expect(spy).toHaveBeenCalledWith("Hello, World!15", 599, expect.any(Headers));
   });
 
   const request = { method: "POST", headers: {}, body: { foo: "bar" } };
   it("2. should check run normally if no inputSchema", async () => {
     const routeSpec = {
-      handler: () => contentResult
+      handler: (req) => contentResult
     };
     const result = await runRoute(request, routeSpec);
     expect(result).toEqual(contentResult);

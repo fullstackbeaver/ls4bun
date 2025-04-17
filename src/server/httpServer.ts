@@ -3,7 +3,7 @@ import type { BunRequest }                                                      
 import      { Method }                                                           from "./httpServer_constants";
 import type { RouteSpec }                                                        from "../router/router_type";
 import      { makeResponse }                                                     from "../response/response";
-import      { sanitizeInput }                                                    from "utils/utils";
+import      { isString, sanitizeInput }                                                    from "utils/utils";
 
 const middlewares: Middlewares = {
   after : [],
@@ -122,7 +122,7 @@ function bunRequestToWorkRequest(request:BunRequest): WorkRequest {
  *
  * @throws {Error} Throws an error if the content type is not "application/json" or if the body cannot be parsed as JSON.
  */
-export async function extractBody(request: BunRequest): Promise<Record<string, any> | null> { //exported for testing
+export async function extractBody(request: BunRequest): Promise<string | Record<string, any> | null> { //exported for testing
   if (
     request.method === Method.GET     ||
     request.method === Method.DELETE  ||
@@ -130,12 +130,12 @@ export async function extractBody(request: BunRequest): Promise<Record<string, a
     !request.body
   ) return null;
 
-  const contentType = request.headers.get("content-type");
+  if (!request.json) throw new Error("400|Invalid body");
 
-  if (contentType !== "application/json") throw new Error("400|Invalid content type. Expected application/json");
-
+  // !isString(request.body) request.body = await request.body.text();
   try {
-    return sanitizeInput(await JSON.parse(request.body.toString())) as Record<string, any>;
+    const body = await request.json();
+    return sanitizeInput(body) as Record<string, any>;
   } catch (e) {
     throw new Error("400|Invalid body\n" + (e instanceof Error ? e.message : e));
   }

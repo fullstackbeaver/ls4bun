@@ -1,6 +1,6 @@
-import      { addStaticFolder, handleRoute, sanitizeString } from "../lib";
-import type { BunRequest }                                   from "bun";
-import type { WorkRequest }                                  from "../lib";
+import      { Method, addStaticFolder, handleRoute, sanitizeString } from "../lib";
+import type { BunRequest }                                           from "bun";
+import type { WorkRequest }                                          from "../lib";
 
 /* if you want to use the validator, of course you need to import your library. In following example it's `zod` */
 
@@ -30,22 +30,20 @@ export const exampleRoutes = {
       return "ok "+query;
     }
   }),
-  /*
-  example how to use validator for input (available also for output)
   [base+"/add"]: {
     [Method.POST]: (req:BunRequest) =>  handleRoute(req,{
       handler: (request: WorkRequest) => {
-        return "ok";
+        return request.body;
       },
-      inputSchema: z.object({
-        contactInfo: z.object({
-          email: z.string().email(),
-          name : z.string(),
-          phone: z.string().optional(),
-        }),
-      })
-    }) },
-  */
+      // inputSchema: z.object({
+      //   contactInfo: z.object({
+      //     email: z.string().email(),
+      //     name : z.string(),
+      //     phone: z.string().optional(),
+      //   }),
+      // })
+    })
+  },
 
   ...addStaticFolder(__dirname+"/dist", "/")
 };

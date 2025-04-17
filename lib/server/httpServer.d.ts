@@ -40,7 +40,7 @@ export declare function runRoute(request: WorkRequest, { handler, inputSchema, o
  *
  * @throws {Error} Throws an error if the content type is not "application/json" or if the body cannot be parsed as JSON.
  */
-export declare function extractBody(request: BunRequest): Promise<Record<string, any> | null>;
+export declare function extractBody(request: BunRequest): Promise<string | Record<string, any> | null>;
 /**
  * Sets the validation function to be used for validating input and output schemas.
  *

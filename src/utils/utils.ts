@@ -1,6 +1,6 @@
 import DOMPurify from "isomorphic-dompurify";
 
-type Sanitizable = string | Array<unknown> | Record<string, unknown>;
+export type Sanitizable = string | Array<unknown> | Record<string, unknown>;
 
 export function isString(value: unknown): value is string {
   return typeof value === "string";

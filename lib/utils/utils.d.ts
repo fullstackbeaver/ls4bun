@@ -1,4 +1,4 @@
-type Sanitizable = string | Array<unknown> | Record<string, unknown>;
+export type Sanitizable = string | Array<unknown> | Record<string, unknown>;
 export declare function isString(value: unknown): value is string;
 /**
  * Recursively sanitizes the input to prevent XSS attacks.
@@ -24,4 +24,3 @@ export declare function sanitizeInput(input: Sanitizable): Sanitizable;
  * @returns {string} - The sanitized string with HTML entity replacements.
  */
 export declare function sanitizeString(input: string): string;
-export {};

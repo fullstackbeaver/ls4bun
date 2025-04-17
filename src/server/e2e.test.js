@@ -11,10 +11,10 @@ describe("End-to-end tests", () => {
   });
 
   const route2              = base+"/users/555";
-  const expedectedResponse2 = "Hello User 555!";
+  const expedectedResponse2 = {user:"Hello User 555!"};
   it(title(route2, expedectedResponse2), async () => {
     const response = await fetch(route2);
-    expect(await response.text()).toBe(expedectedResponse2);
+    expect(await response.json()).toEqual(expedectedResponse2);
   });
 
   const route3              = base+"/routeWithMiddleware/555";
@@ -40,6 +40,24 @@ describe("End-to-end tests", () => {
   it(title(route5, expedectedResponse5), async () => {
     const response = await fetch(route5);
     expect(await response.text()).toBe(expedectedResponse5);
+  });
+
+
+  const route6              = base+"/add";
+  const expedectedResponse6 = {a:1,b:"c"};
+  // console.clear();
+  it(title(route6, expedectedResponse6), async () => {
+  const result = await fetch(route6, {
+      method: 'POST',
+      headers: {
+        'Accept'      : 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ a: 1, b: "c" })
+    });
+    const response = await result.json();
+    console.log("---*",response);
+    expect(response).toEqual(expedectedResponse6);
   });
 });
 

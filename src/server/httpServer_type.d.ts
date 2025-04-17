@@ -1,6 +1,8 @@
 import      { Method }      from "./httpServer_constants";
 import type { RouteAnswer } from "../router/router_type";
 
+export type BodyExtracted = Record<string, any> | null
+
 export type WorkRequest = {
   body   : Record<string, any> | null
   context: Record<string, any>  // Define context to be a more descriptive type if possible
