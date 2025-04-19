@@ -3,7 +3,7 @@ import type { BunRequest }                                                      
 import      { Method }                                                           from "./httpServer_constants";
 import type { RouteSpec }                                                        from "../router/router_type";
 import      { makeResponse }                                                     from "../response/response";
-import      { isString, sanitizeInput }                                                    from "utils/utils";
+import      { sanitizeInput }                                                    from "utils/utils";
 
 const middlewares: Middlewares = {
   after : [],

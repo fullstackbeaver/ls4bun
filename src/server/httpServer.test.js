@@ -1,6 +1,5 @@
 import { describe, expect, it, spyOn }           from "bun:test";
 import { handleRoute, runRoute, useMiddlewares } from "./httpServer";
-import { makeResponse as originalMakeResponse }  from "../response/response";
 
 useMiddlewares({
   before: [

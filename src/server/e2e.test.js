@@ -45,7 +45,6 @@ describe("End-to-end tests", () => {
 
   const route6              = base+"/add";
   const expedectedResponse6 = {a:1,b:"c"};
-  // console.clear();
   it(title(route6, expedectedResponse6), async () => {
   const result = await fetch(route6, {
       method: 'POST',
