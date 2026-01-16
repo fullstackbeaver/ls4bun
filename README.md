@@ -1,10 +1,13 @@
 # ls4bun
-*A Lightweight Server for Bun*
+*Where simplicity meets security for your Bun server.*
 
+🔒 **Secure by design**: protected request deserialization and optional input/output validation.
 
-ls4bun is designed to be a minimal and secure overlay to bun server. It offers simplified routings like static routes. It includes a secure deserialization of the body in requests and an optional validation system of input and output schemas. Finally it integrates a system of middlewares.
+⚡ **Minimalist & performant**: simplified routing (static routes, built-in middlewares).
 
-It is currently in development.
+🛡️ **No compromises**: a lightweight overlay built for demanding developers.
+
+/!\ **It is currently in development.**
 
 ## Roadmap
 
@@ -56,10 +59,12 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To make a new build:
+
+Check that ./scripts/build.sh can be executed, then run
 
 ```bash
-bun run index.ts
+bun build-lib
 ```
 
 This project was created using `bun init` in bun v1.2.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

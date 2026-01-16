@@ -3,27 +3,27 @@
   "main": "lib/index.js",
   "module": "src/index.ts",
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.24.0",
-    "@types/bun": "^1.2.10",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@types/bun": "^1.3.6",
     "@types/eslint": "^9.6.1",
-    "@types/node": "^22.14.1",
-    "@typescript-eslint/eslint-plugin": "^8.30.1",
-    "@typescript-eslint/parser": "^8.30.1",
-    "eslint": "^9.24.0",
-    "typescript": "^5.8.3"
+    "@types/node": "^22.19.7",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "./scripts/build.sh",
-    "run_example": "bun --watch run ./example/index.js",
+    "build-lib": "./scripts/build.sh",
+    "run-example": "bun --watch run ./example/index.js",
     "tests": "bun run ./scripts/runTests.ts"
   },
   "type": "module",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "isomorphic-dompurify": "^2.23.0"
+    "isomorphic-dompurify": "^2.35.0"
   }
 }
