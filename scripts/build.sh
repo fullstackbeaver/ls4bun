@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##### nettoyage
-if [ -d "./lib" ]; then
+if [[ -d "./lib" ]]; then
     rm -r "./lib"
 fi
 

@@ -45,22 +45,21 @@ function listAllFiles(dirPath:string, arrayOfFiles:string[]):string[] {
  * getFolderContent("/path/to/directory");
  * // => { content: ["file1.txt", "subdir/file2.txt"], start: "/path/to/directory" }
  */
-
 export function getFolderContent(folder: string) {
   try {
-    const result     = listAllFiles(folder, []) ;
+    const result     = listAllFiles(folder, []);
     const lastFolder = folder.split("/").pop() as string;
-    const start      = result[0].indexOf(lastFolder)+lastFolder.length;
+    const start      = result[0].indexOf(lastFolder) + lastFolder.length;
     return {
       content: result.map((file) => file.slice(start)),
       start  : result[0].slice(0, start)
     };
   } catch (err) {
-    const prefix = 500+"|";
-    if (!(err instanceof Error)) {
-      err = new Error(prefix + err);
-    } else {
+    const prefix = 500 + "|";
+    if (err instanceof Error) {
       err.message = prefix + err.message;
+    } else {
+      err = new Error(prefix + err);
     }
     throw err;
   }

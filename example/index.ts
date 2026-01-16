@@ -10,7 +10,7 @@ Bun.serve({
       headers: {
         "Content-Type": "text/html",
       },
-      status: parseInt(status) ?? 500,
+      status: Number.parseInt(status) ?? 500,
     });
   },
   port  : 4002,

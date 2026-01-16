@@ -1,6 +1,6 @@
 // run-tests.ts
-import { setTimeout } from "timers/promises";
-import { spawnSync }  from "child_process";
+import { setTimeout } from "node:timers/promises";
+import { spawnSync }  from "node:child_process";
 
 // Lancer l"application
 const appProcess = Bun.spawn(["bun", "run", "./example/index.ts"], {
